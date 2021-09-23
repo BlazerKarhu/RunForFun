@@ -1,4 +1,4 @@
-package com.joonasm.runforfun
+package com.joonasm.sporttracker
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.joonasm.runforfun
+package com.joonasm.sporttracker
 
 import org.junit.Test
 

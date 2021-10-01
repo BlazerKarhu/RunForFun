@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.joonasm.sporttracker.HomeFragment"
+        android:label="@string/home_label"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.joonasm.sporttracker.MapFragment"
+        android:label="@string/map_label"
+        tools:layout="@layout/fragment_map" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.joonasm.sporttracker.ProfileFragment"
+        android:label="@string/profile_label"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

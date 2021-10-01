@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">Sports Tracker</string>
+    <string name="app_name" translatable="false">Sports Tracker</string>
+    <string name="hello_home_fragment" translatable="false">Hello home fragment</string>
+    <string name="hello_map_fragment" translatable="false">Hello map fragment</string>
+    <string name="hello_profile_fragment" translatable="false">Hello profile fragment</string>
+    <string name="profile_label">Profile</string>
+    <string name="home_label">Home</string>
+    <string name="map_label">Map</string>
 </resources>

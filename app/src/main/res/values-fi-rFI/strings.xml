@@ -3,4 +3,5 @@
     <string name="profile_label">Profiili</string>
     <string name="home_label">Koti</string>
     <string name="map_label">Kartta</string>
+    <string name="current_location">Tämän hetkinen sijainti</string>
 </resources>

@@ -70,11 +70,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         running=true
     }
 
-    override fun onStop() {
-        super.onStop()
-        sm.unregisterListener(this)
-    }
-
     private fun initNavigation() {
         val navHost =
             supportFragmentManager.findFragmentById(R.id.fragment_container_view) as NavHostFragment

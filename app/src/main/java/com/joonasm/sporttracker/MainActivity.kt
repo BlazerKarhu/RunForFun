@@ -10,10 +10,10 @@ import android.hardware.SensorManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -23,6 +23,7 @@ import com.joonasm.sporttracker.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var binding: ActivityMainBinding
+
     //Sensor manager for step counter
     private lateinit var sm: SensorManager
     private var running = false
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onStart() {
         super.onStart()
         requestActivityRecognitionPermission()
-        running=true
+        running = true
     }
 
     private fun initNavigation() {
@@ -84,14 +85,34 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         val navView = binding.bottomNavigationView
         navView.setupWithNavController(navController)
+
+        //Should hide the bottom tab, but does not
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.homeFragment -> showBottomNav()
+                R.id.mapFragment -> showBottomNav()
+                R.id.profileFragment -> showBottomNav()
+                else -> hideBottomNav()
+            }
+        }
     }
 
-    private fun initSensor(){
+    private fun showBottomNav() {
+        binding.bottomNavigationView.visibility = View.VISIBLE
+
+    }
+
+    private fun hideBottomNav() {
+        binding.bottomNavigationView.visibility = View.GONE
+
+    }
+
+    private fun initSensor() {
         sm = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         sensorStepCounter = sm.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
     }
 
-    private fun registerSensor(){
+    private fun registerSensor() {
         sensorStepCounter?.let {
             sm.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
         }
@@ -148,6 +169,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         editor.putFloat("key1", previousTotalSteps)
         editor.apply()
     }
+
     private fun loadData() {
 
         // In this function we will retrieve data

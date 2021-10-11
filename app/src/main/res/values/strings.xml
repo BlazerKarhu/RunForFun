@@ -7,4 +7,9 @@
     <string name="home_label">Home</string>
     <string name="map_label">Map</string>
     <string name="current_location">Current Location</string>
+    <string name="speed_meter" translatable="false">%.2fKm/h</string>
+    <string name="distance_meter" translatable="false">%.1fm</string>
+    <string name="start_exercise">Start Exercise</string>
+    <string name="stop_exercise">Stop Exercise</string>
+    <string name="new_exercise">New exercise</string>
 </resources>

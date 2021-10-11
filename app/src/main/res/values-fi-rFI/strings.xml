@@ -4,4 +4,7 @@
     <string name="home_label">Koti</string>
     <string name="map_label">Kartta</string>
     <string name="current_location">Tämän hetkinen sijainti</string>
+    <string name="start_exercise">Aloita harjoitus</string>
+    <string name="stop_exercise">Lopeta harjoitus</string>
+    <string name="new_exercise">Uusi harjoitus</string>
 </resources>

@@ -16,14 +16,14 @@ class ExerciseModel(application: Application, uid: Long): AndroidViewModel(appli
     fun getExercises() = userExercises
 
     @DelicateCoroutinesApi
-    fun insertContact(uid: Long, type: String, date: String, distance: Float, duration: Float) {
+    fun insertExercise(uid: Long, type: String, date: String, distance: Float, duration: Float) {
         GlobalScope.launch {
             val db = UserDB.get(getApplication())
             db.exerciseDao().insert(ExerciseInfo(uid, type, date, distance, duration))
         }
     }
 }
-class ContactModelFactory(private val application: Application, private val uid: Long) :
+class ExerciseModelFactory(private val application: Application, private val uid: Long) :
     ViewModelProvider.NewInstanceFactory() {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
         ExerciseModel(application, uid) as T

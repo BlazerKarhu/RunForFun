@@ -18,7 +18,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.joonasm.sporttracker.database.ExerciseInfo
+import com.joonasm.sporttracker.database.User
+import com.joonasm.sporttracker.database.UserDB
 import com.joonasm.sporttracker.databinding.ActivityMainBinding
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -31,6 +41,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var totalSteps = 0f
     private var previousTotalSteps = 0f
 
+    @DelicateCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -40,6 +51,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         initSensor()
         loadData()
         resetSteps()
+        addHardcodedPerson()
     }
 
     private fun requestActivityRecognitionPermission() {
@@ -180,5 +192,25 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         Log.d("MainActivity", "$savedNumber")
 
         previousTotalSteps = savedNumber
+    }
+
+    @DelicateCoroutinesApi
+    private fun addHardcodedPerson() {
+        val db = UserDB.get(applicationContext)
+
+        GlobalScope.launch {
+            val id = db.userDao().insert(User(0, "John", "Doe", 160, 80))
+            db.exerciseDao().insert(ExerciseInfo(id, "Run", getCurrentDate(), 65f, 1200f))
+            db.exerciseDao().insert(ExerciseInfo(id, "Walk", getCurrentDate(), 30f, 500f))
+            withContext(Main) {
+                //txtDbInsert.text = getString(R.string.user_added_with_id, id)
+                Log.d("DBG", "User added with $id")
+            }
+        }
+    }
+
+    private fun getCurrentDate(): String {
+        val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:MM:SS", Locale.getDefault())
+        return simpleDateFormat.format(Date())
     }
 }

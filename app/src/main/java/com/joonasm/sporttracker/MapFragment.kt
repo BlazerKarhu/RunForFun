@@ -16,11 +16,15 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
+import com.joonasm.sporttracker.database.ExerciseInfo
+import com.joonasm.sporttracker.database.User
+import com.joonasm.sporttracker.database.UserDB
 import com.joonasm.sporttracker.databinding.FragmentMapBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -36,12 +40,14 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
     lateinit var locationManager: LocationManager
     private lateinit var map: MapView
     private lateinit var marker: Marker
+    private var active = false
     private var track = true
     private var currentSpeed = 0f
     private var locations = arrayListOf<Location>()
     private var distance = 0f
     private var totalDistance = 0f
 
+    @DelicateCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -78,6 +84,26 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
             track = !track
         }
 
+        binding.startButton.setOnClickListener {
+            binding.startButton.visibility = View.INVISIBLE
+            binding.endButton.visibility = View.VISIBLE
+            binding.speedMeter.visibility = View.VISIBLE
+            binding.distanceMeter.visibility = View.VISIBLE
+            active = true
+        }
+
+        binding.endButton.setOnClickListener {
+            binding.endButton.visibility = View.INVISIBLE
+            binding.speedMeter.visibility = View.INVISIBLE
+            binding.distanceMeter.visibility = View.INVISIBLE
+            active = false
+            parentFragmentManager.commit {
+                replace<HomeFragment>(R.id.fragment_container_view)
+                setReorderingAllowed(true)
+                addToBackStack(null) // name can be null
+            }
+        }
+
         return binding.root
     }
 
@@ -106,8 +132,11 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
     }
 
     override fun onLocationChanged(location: Location) {
-        getSpeed(location)
-        getDistance(location)
+        if (active){
+            getSpeed(location)
+            getDistance(location)
+            locations.add(location)
+        }
         locations.add(location)
         Log.d("LOCATIONS", locations.size.toString())
         if (track) {
@@ -140,7 +169,7 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
     }
 
     //get the distance from the given location updated
-    private fun getDistance(location: Location) {
+    private fun getDistance(location: Location): Float {
         try {
             distance = locations.last().distanceTo(location)
             totalDistance += distance
@@ -149,6 +178,7 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
         } catch (e: Exception) {
             Log.e("DISTANCE", e.toString())
         }
+        return totalDistance
     }
 
     //Set marker on users current location
@@ -192,5 +222,23 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
         }
         return address
     }
-}
+/*
+    @DelicateCoroutinesApi
+    fun saveExercise() {
+        GlobalScope.launch {
+            val id = db.userDao().insert(User(0, "John", "Doe", 160, 80))
 
+            ExerciseInfo(
+                    id,
+                    "Exercise",
+                    (activity as MainActivity).getCurrentDate(),
+                    65f,
+                    totalDistance
+                )
+            withContext(Dispatchers.Main) {
+                //txtDbInsert.text = getString(R.string.user_added_with_id, id)
+                Log.d("DBG", "Exercise added to User $id")
+            }
+        }
+    }*/
+}

@@ -31,6 +31,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+
+
+
 class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var binding: ActivityMainBinding
 
@@ -40,12 +43,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var sensorStepCounter: Sensor? = null
     private var totalSteps = 0f
     private var previousTotalSteps = 0f
+    private val db by lazy { UserDB.get(this) }
 
     @DelicateCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
 
         initNavigation()
         initSensor()
@@ -109,12 +114,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    private fun showBottomNav() {
+    fun showBottomNav() {
         binding.bottomNavigationView.visibility = View.VISIBLE
 
     }
 
-    private fun hideBottomNav() {
+    fun hideBottomNav() {
         binding.bottomNavigationView.visibility = View.GONE
 
     }
@@ -194,6 +199,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         previousTotalSteps = savedNumber
     }
 
+
     @DelicateCoroutinesApi
     private fun addHardcodedPerson() {
         val db = UserDB.get(applicationContext)
@@ -209,7 +215,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
     }
 
-    private fun getCurrentDate(): String {
+    fun getCurrentDate(): String {
         val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:MM:SS", Locale.getDefault())
         return simpleDateFormat.format(Date())
     }

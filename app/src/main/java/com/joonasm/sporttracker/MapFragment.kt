@@ -93,15 +93,18 @@ class MapFragment : Fragment(R.layout.fragment_map), LocationListener {
         }
 
         binding.endButton.setOnClickListener {
+            binding.startButton.visibility = View.VISIBLE
             binding.endButton.visibility = View.INVISIBLE
             binding.speedMeter.visibility = View.INVISIBLE
             binding.distanceMeter.visibility = View.INVISIBLE
             active = false
-            parentFragmentManager.commit {
+            totalDistance = 0f
+            binding.distanceMeter.text = totalDistance.toString()
+            /*parentFragmentManager.commit {
                 replace<HomeFragment>(R.id.fragment_container_view)
                 setReorderingAllowed(true)
                 addToBackStack(null) // name can be null
-            }
+            }*/
         }
 
         return binding.root
